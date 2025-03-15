@@ -6,7 +6,7 @@ This project builds a **Machine Learning model** to predict the weight of a fish
 ---
 
 ## Project Components
-**ML Model:** Trained using `RandomForestRegressor` for accurate predictions.  
+**ML Model:** Trained using `GridSearchCV` for accurate predictions.  
 **Flask API:** Handles incoming requests and serves predictions.  
 **Web Interface:** HTML/CSS-based frontend for user interaction.  
 **Postman Testing:** API tested for correctness before deployment.  
