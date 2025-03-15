@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fish Weight Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Fish Weight Prediction</h1>
+        <form id="predictionForm">
+            <label for="species">Select Species:</label>
+            <select id="species">
+                <option value="Bream">Bream</option>
+                <option value="Roach">Roach</option>
+                <option value="Whitefish">Whitefish</option>
+                <option value="Parkki">Parkki</option>
+                <option value="Perch">Perch</option>
+                <option value="Pike">Pike</option>
+                <option value="Smelt">Smelt</option>
+            </select>
+
+            <label>Length1 (cm):</label>
+            <input type="number" id="length1" step="0.01" required>
+
+            <label>Length2 (cm):</label>
+            <input type="number" id="length2" step="0.01" required>
+
+            <label>Length3 (cm):</label>
+            <input type="number" id="length3" step="0.01" required>
+
+            <label>Height (cm):</label>
+            <input type="number" id="height" step="0.01" required>
+
+            <label>Width (cm):</label>
+            <input type="number" id="width" step="0.01" required>
+
+            <button type="submit">Predict Weight</button>
+        </form>
+
+        <h2 id="result"></h2>
+    </div>
+
+    <script>
+        document.getElementById("predictionForm").onsubmit = async function(event) {
+            event.preventDefault();
+
+            const species = document.getElementById("species").value;
+            const length1 = parseFloat(document.getElementById("length1").value);
+            const length2 = parseFloat(document.getElementById("length2").value);
+            const length3 = parseFloat(document.getElementById("length3").value);
+            const height = parseFloat(document.getElementById("height").value);
+            const width = parseFloat(document.getElementById("width").value);
+
+            const response = await fetch("http://127.0.0.1:5000/predict", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    Species: species,
+                    Length1: length1,
+                    Length2: length2,
+                    Length3: length3,
+                    Height: height,
+                    Width: width
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.prediction) {
+                document.getElementById("result").innerText = "Predicted Weight: " + data.prediction.toFixed(2) + " grams";
+            } else {
+                document.getElementById("result").innerText = "Error: " + data.error;
+            }
+        };
+    </script>
+
+</body>
+</html>
